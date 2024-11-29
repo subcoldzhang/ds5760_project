@@ -1,0 +1,23 @@
+[
+    {
+        "user_id": 1,
+        "username": "Alice",
+        "age": 25,
+        "location": "New York",
+        "bio": "Love traveling and photography."
+    },
+    {
+        "user_id": 2,
+        "username": "Bob",
+        "age": 30,
+        "location": "Los Angeles",
+        "bio": "Tech enthusiast and gamer."
+    },
+    {
+        "user_id": 3,
+        "username": "Charlie",
+        "age": 22,
+        "location": "Chicago",
+        "bio": "Fitness junkie and foodie."
+    }
+]
