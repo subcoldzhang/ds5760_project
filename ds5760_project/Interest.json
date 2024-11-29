@@ -1,0 +1,23 @@
+[
+    {
+        "interest_id": 201,
+        "user_id": 1,
+        "interest_name": "Photography",
+        "description": "Capturing moments through the lens.",
+        "timestamp": "2024-11-20T14:00:00Z"
+    },
+    {
+        "interest_id": 202,
+        "user_id": 2,
+        "interest_name": "Gaming",
+        "description": "Exploring new games and strategies.",
+        "timestamp": "2024-11-18T12:00:00Z"
+    },
+    {
+        "interest_id": 203,
+        "user_id": 3,
+        "interest_name": "Fitness",
+        "description": "Staying healthy and active.",
+        "timestamp": "2024-11-19T06:00:00Z"
+    }
+]
