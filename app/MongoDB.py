@@ -14,7 +14,7 @@ from datetime import datetime
 client = MongoClient(host="localhost", port=27017)
 
 # Import the utils module
-utils = SourceFileLoader('*', 'C:/Users/Lenovo/Desktop/ds5760_project/app/utils.py').load_module()
+utils = SourceFileLoader('*', "D:/OneDrive - Vanderbilt/Desktop/Hillbert's PC Files/My Grad Life/Fall 2024/DS5760_NoSQL/FinalProject/ds5760_project/app/utils.py").load_module()
 
 # 2. Select the database
 db = client.platform # 'use platform'
@@ -38,6 +38,82 @@ def get_initial_response():
     # Returning the object
     return resp
 
+############################## Query 1 ##############################
+#####################################################################
+@app.route('/search_by_user_id/<user_id>', methods=['GET'])
+def search_by_user_id(user_id):
+    '''
+       Function to find user by id.
+       Input is id. Id will follows /search_by_user_id/.
+       Normal output is detail information of user. 
+       If user_id doesn't exist, then it will print error 404, No This user.
+       If there are other errors, error 500 or error 404 (not found) will be returned.
+    '''
+    try:
+        # Query the document
+        result = user.find({"user_id": int(user_id)})
+        
+        # If document not found
+        if not result:
+            return jsonify({"message": "No This user"}), 404
+        
+        return dumps(result), 200
+
+    except Exception as e:
+        # Error while trying to create customers
+        # Add message for debugging purpose
+        return jsonify({"error": str(e)}), 400
+    
+@app.route('/search_by_post_id/<post_id>', methods=['GET'])
+def search_by_post_id(post_id):
+    '''
+       Function to find post by id.
+       Input is id. Id will follows /search_by_post_id/.
+       Normal output is detail information of post. 
+       If post_id doesn't exist, then it will print error 404, No This post.
+       If there are other errors, error 500 or error 404 (not found) will be returned.
+    '''
+    try:
+        # Query the document
+        result = post.find({"post_id": int(post_id)})
+        
+        # If document not found
+        if not result:
+            return jsonify({"message": "No This post"}), 404
+        
+        return dumps(result), 200
+
+    except Exception as e:
+        # Error while trying to create customers
+        # Add message for debugging purpose
+        return jsonify({"error": str(e)}), 400
+    
+@app.route('/search_by_interest_id/<interest_id>', methods=['GET'])
+def search_by_interest_id(interest_id):
+    '''
+       Function to find interest by id.
+       Input is id. Id will follows /search_by_interest_id/.
+       Normal output is detail information of interest. 
+       If interest_id doesn't exist, then it will print error 404, No This interest.
+       If there are other errors, error 500 or error 404 (not found) will be returned.
+    '''
+    try:
+        # Query the document
+        result = interest.find({"interest_id": int(interest_id)})
+        
+        # If document not found
+        if not result:
+            return jsonify({"message": "No This interest"}), 404
+        
+        return dumps(result), 200
+
+    except Exception as e:
+        # Error while trying to create customers
+        # Add message for debugging purpose
+        return jsonify({"error": str(e)}), 400
+
+############################## Query 2 ##############################
+#####################################################################
 @app.route('/create/user', methods=['POST'])
 def create_user():
     '''
@@ -62,28 +138,6 @@ def create_user():
     except Exception as e:
         # Error while trying to create customers
         # Add message for debugging purpose
-        return jsonify({"error": str(e)}), 500
-
-@app.route('/create/post', methods=['POST'])
-def create_post():
-    '''
-       Function to create a new post.
-       Input is a JSON object with post details.
-       Normal output is "Post successfully created".
-       If any required fields are missing, it will return error 400 with a message.
-    '''
-    try:
-        post_data = request.get_json()
-        required_fields = ['post_id', 'user_id', 'content', 'topic', 'timestamp']
-
-        for field in required_fields:
-            if field not in post_data:
-                return jsonify({"error": f"Missing required field"}), 400
-
-        post.insert_one(post_data)
-        return jsonify({"message": "Post successfully created."}), 201
-
-    except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @app.route('/create/interest', methods=['POST'])
@@ -174,172 +228,8 @@ def create_comment():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/search_by_user_id/<user_id>', methods=['GET'])
-def search_by_user_id(user_id):
-    '''
-       Function to find user by id.
-       Input is id. Id will follows /search_by_user_id/.
-       Normal output is detail information of user. 
-       If user_id doesn't exist, then it will print error 404, No This user.
-       If there are other errors, error 500 or error 404 (not found) will be returned.
-    '''
-    try:
-        # Query the document
-        result = user.find({"user_id": int(user_id)})
-        
-        # If document not found
-        if not result:
-            return jsonify({"message": "No This user"}), 404
-        
-        return dumps(result), 200
-
-    except Exception as e:
-        # Error while trying to create customers
-        # Add message for debugging purpose
-        return jsonify({"error": str(e)}), 400
-    
-@app.route('/search_by_post_id/<post_id>', methods=['GET'])
-def search_by_post_id(post_id):
-    '''
-       Function to find post by id.
-       Input is id. Id will follows /search_by_post_id/.
-       Normal output is detail information of post. 
-       If post_id doesn't exist, then it will print error 404, No This post.
-       If there are other errors, error 500 or error 404 (not found) will be returned.
-    '''
-    try:
-        # Query the document
-        result = post.find({"post_id": int(post_id)})
-        
-        # If document not found
-        if not result:
-            return jsonify({"message": "No This post"}), 404
-        
-        return dumps(result), 200
-
-    except Exception as e:
-        # Error while trying to create customers
-        # Add message for debugging purpose
-        return jsonify({"error": str(e)}), 400
-    
-@app.route('/search_by_interest_id/<interest_id>', methods=['GET'])
-def search_by_interest_id(interest_id):
-    '''
-       Function to find interest by id.
-       Input is id. Id will follows /search_by_interest_id/.
-       Normal output is detail information of interest. 
-       If interest_id doesn't exist, then it will print error 404, No This interest.
-       If there are other errors, error 500 or error 404 (not found) will be returned.
-    '''
-    try:
-        # Query the document
-        result = interest.find({"interest_id": int(interest_id)})
-        
-        # If document not found
-        if not result:
-            return jsonify({"message": "No This interest"}), 404
-        
-        return dumps(result), 200
-
-    except Exception as e:
-        # Error while trying to create customers
-        # Add message for debugging purpose
-        return jsonify({"error": str(e)}), 400
-
-@app.route('/update_by_user_name', methods=['PUT'])
-def update_by_user():
-    '''
-       Function to update details of user by name.
-       Input is name and new information.
-       Normal output is user successfully updated. 
-       If name doesn't exist, then it will print error 400, name is required.
-       If name doesn't be found in database, then it will print error 304, user not found.
-       If there are other errors, error 500 or error 404 (not found) will be returned.
-    '''
-    try:
-        name = request.json.get('username')
-        if not name:
-            return jsonify({"error": "Name is required"}), 400
-        
-        # update details of user
-        updated_data = ast.literal_eval(json.dumps(request.get_json()))
-        # Query the document
-        records_updated = user.update_one({'username': name}, {"$set": updated_data})
-
-        if records_updated.modified_count > 0:
-            # Prepare the response
-            return jsonify({"message": "User successfully updated"}), 200
-        else:
-            # Resource not found
-            return jsonify({"message": "User not found"}), 304
-
-    except Exception as e:
-        # Error while trying to delete the resource
-        # Add message for debugging purpose
-        return jsonify({"error": str(e)}), 500
-
-@app.route('/update_by_post_id', methods=['PUT'])
-def update_by_post_id():
-    '''
-       Function to update details of post by id
-       Input is id and new information.
-       Normal output is post successfully updated. 
-       If id doesn't exist, then it will print error 400, id is required.
-       If id doesn't be found in database, then it will print error 304, post not found.
-       If there are other errors, error 500 or error 404 (not found) will be returned.
-    '''
-    try:
-        id = request.json.get('id')
-        if not id:
-            return jsonify({"error": "Id is required"}), 400
-        
-        updated_data = ast.literal_eval(json.dumps(request.get_json()))
-        # Query the document
-        records_updated = post.update_one({'post_id': id}, {"$set": updated_data})
-
-        if records_updated.modified_count > 0:
-            # Prepare the response
-            return jsonify({"message": "Post successfully updated"}), 200
-        else:
-            # Resource not found
-            return jsonify({"message": "Post not found"}), 304
-
-    except Exception as e:
-        # Error while trying to delete the resource
-        # Add message for debugging purpose
-        return jsonify({"error": str(e)}), 500
-    
-@app.route('/update_by_comment_id', methods=['PUT'])
-def update_by_comment_id():
-    '''
-       Function to update details of comment by id
-       Input is id and new information.
-       Normal output is comment successfully updated. 
-       If id doesn't exist, then it will print error 400, id is required.
-       If id doesn't be found in database, then it will print error 304, comment not found.
-       If there are other errors, error 500 or error 404 (not found) will be returned.
-    '''
-    try:
-        id = request.json.get('id')
-        if not id:
-            return jsonify({"error": "Id is required"}), 400
-        
-        updated_data = ast.literal_eval(json.dumps(request.get_json()))
-        # Query the document
-        records_updated = comment.update_one({'comment_id': id}, {"$set": updated_data})
-
-        if records_updated.modified_count > 0:
-            # Prepare the response
-            return jsonify({"message": "Comment successfully updated"}), 200
-        else:
-            # Resource not found
-            return jsonify({"message": "Comment not found"}), 304
-
-    except Exception as e:
-        # Error while trying to delete the resource
-        # Add message for debugging purpose
-        return jsonify({"error": str(e)}), 500
-    
+############################## Query 3 ##############################
+#####################################################################
 @app.route('/delete_by_user_id', methods=['DELETE'])
 def delete_by_user_id():
     """
@@ -525,6 +415,128 @@ def delete_by_comment_id():
         # Add message for debugging purpose
         return jsonify({"error": str(e)}), 500
 
+############################## Query 4 ##############################
+#####################################################################
+@app.route('/update_by_user_name', methods=['PUT'])
+def update_by_user():
+    '''
+       Function to update details of user by name.
+       Input is name and new information.
+       Normal output is user successfully updated. 
+       If name doesn't exist, then it will print error 400, name is required.
+       If name doesn't be found in database, then it will print error 304, user not found.
+       If there are other errors, error 500 or error 404 (not found) will be returned.
+    '''
+    try:
+        name = request.json.get('username')
+        if not name:
+            return jsonify({"error": "Name is required"}), 400
+        
+        # update details of user
+        updated_data = ast.literal_eval(json.dumps(request.get_json()))
+        # Query the document
+        records_updated = user.update_one({'username': name}, {"$set": updated_data})
+
+        if records_updated.modified_count > 0:
+            # Prepare the response
+            return jsonify({"message": "User successfully updated"}), 200
+        else:
+            # Resource not found
+            return jsonify({"message": "User not found"}), 304
+
+    except Exception as e:
+        # Error while trying to delete the resource
+        # Add message for debugging purpose
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/update_by_post_id', methods=['PUT'])
+def update_by_post_id():
+    '''
+       Function to update details of post by id
+       Input is id and new information.
+       Normal output is post successfully updated. 
+       If id doesn't exist, then it will print error 400, id is required.
+       If id doesn't be found in database, then it will print error 304, post not found.
+       If there are other errors, error 500 or error 404 (not found) will be returned.
+    '''
+    try:
+        id = request.json.get('id')
+        if not id:
+            return jsonify({"error": "Id is required"}), 400
+        
+        updated_data = ast.literal_eval(json.dumps(request.get_json()))
+        # Query the document
+        records_updated = post.update_one({'post_id': id}, {"$set": updated_data})
+
+        if records_updated.modified_count > 0:
+            # Prepare the response
+            return jsonify({"message": "Post successfully updated"}), 200
+        else:
+            # Resource not found
+            return jsonify({"message": "Post not found"}), 304
+
+    except Exception as e:
+        # Error while trying to delete the resource
+        # Add message for debugging purpose
+        return jsonify({"error": str(e)}), 500
+    
+@app.route('/update_by_comment_id', methods=['PUT'])
+def update_by_comment_id():
+    '''
+       Function to update details of comment by id
+       Input is id and new information.
+       Normal output is comment successfully updated. 
+       If id doesn't exist, then it will print error 400, id is required.
+       If id doesn't be found in database, then it will print error 304, comment not found.
+       If there are other errors, error 500 or error 404 (not found) will be returned.
+    '''
+    try:
+        id = request.json.get('id')
+        if not id:
+            return jsonify({"error": "Id is required"}), 400
+        
+        updated_data = ast.literal_eval(json.dumps(request.get_json()))
+        # Query the document
+        records_updated = comment.update_one({'comment_id': id}, {"$set": updated_data})
+
+        if records_updated.modified_count > 0:
+            # Prepare the response
+            return jsonify({"message": "Comment successfully updated"}), 200
+        else:
+            # Resource not found
+            return jsonify({"message": "Comment not found"}), 304
+
+    except Exception as e:
+        # Error while trying to delete the resource
+        # Add message for debugging purpose
+        return jsonify({"error": str(e)}), 500
+
+############################## Query 5 ##############################
+#####################################################################
+@app.route('/newpost', methods=['POST'])
+def post_information():
+    '''
+       Function to create a new post.
+       Input is a JSON object with post details.
+       Normal output is "Post successfully created".
+       If any required fields are missing, it will return error 400 with a message.
+    '''
+    try:
+        post_data = request.get_json()
+        required_fields = ['post_id', 'user_id', 'content', 'topic', 'timestamp']
+
+        for field in required_fields:
+            if field not in post_data:
+                return jsonify({"error": f"Missing required field"}), 400
+
+        post.insert_one(post_data)
+        return jsonify({"message": "Post successfully created."}), 201
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500    
+
+############################## Query 6 ##############################
+#####################################################################
 @app.route('/query_by_timestamp', methods=['GET'])
 def query_by_timestamp():
     """
@@ -556,48 +568,6 @@ def query_by_timestamp():
         # Return error message for debugging
         return jsonify({"error": str(e)}), 500
 
-@app.route('/query_top_posts', methods=['GET'])
-def query_top_posts():
-    """
-       Function to query the top 3 most popular posts.
-       The popularity of a post is determined by the number of likes.
-       Output is a ranked list of post IDs and their like counts.
-       If there are other errors, error 500 will be returned.
-    """
-    try:
-        top_posts = list(like.aggregate([
-            {"$group": {"_id": "$post_id", "like_count": {"$sum": 1}}},
-            {"$sort": {"like_count": -1}},
-            {"$limit": 3}
-        ]))
-
-        return jsonify(top_posts), 200
-
-    except Exception as e:
-        # Return error message for debugging
-        return jsonify({"error": str(e)}), 500
-    
-    
-@app.route('/query_most_common_interest', methods=['GET'])
-def query_most_common_interest():
-    """
-       Function to query the top 3 most common interest.
-       The popularity of a interest is determined by the number of likes.
-       Output is a interest and its like counts.
-       If there are other errors, error 500 will be returned.
-    """
-    try:
-        common_interest = list(interest.aggregate([
-            {"$group": {"_id": "$interest_name", "count": {"$sum": 1}}},
-            {"$sort": {"count": -1}},
-            {"$limit": 1}
-        ]))
-
-        return jsonify(common_interest), 200
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-    
 @app.route('/query_friends', methods=['GET'])
 def query_friends():
     """
@@ -623,7 +593,52 @@ def query_friends():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+############################## Query 7 ##############################
+#####################################################################
+@app.route('/query_top_posts', methods=['GET'])
+def query_top_posts():
+    """
+       Function to query the top 3 most popular posts.
+       The popularity of a post is determined by the number of likes.
+       Output is a ranked list of post IDs and their like counts.
+       If there are other errors, error 500 will be returned.
+    """
+    try:
+        top_posts = list(like.aggregate([
+            {"$group": {"_id": "$post_id", "like_count": {"$sum": 1}}},
+            {"$sort": {"like_count": -1}},
+            {"$limit": 3}
+        ]))
+
+        return jsonify(top_posts), 200
+
+    except Exception as e:
+        # Return error message for debugging
+        return jsonify({"error": str(e)}), 500
     
+
+@app.route('/query_most_common_interest', methods=['GET'])
+def query_most_common_interest():
+    """
+       Function to query the top 3 most common interest.
+       The popularity of a interest is determined by the number of likes.
+       Output is a interest and its like counts.
+       If there are other errors, error 500 will be returned.
+    """
+    try:
+        common_interest = list(interest.aggregate([
+            {"$group": {"_id": "$interest_name", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}},
+            {"$limit": 1}
+        ]))
+
+        return jsonify(common_interest), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     '''Send message to the user if route is not defined.'''
