@@ -14,7 +14,7 @@ from datetime import datetime
 client = MongoClient(host="localhost", port=27017)
 
 # Import the utils module
-utils = SourceFileLoader('*', "D:/OneDrive - Vanderbilt/Desktop/Hillbert's PC Files/My Grad Life/Fall 2024/DS5760_NoSQL/FinalProject/ds5760_project/app/utils.py").load_module()
+utils = SourceFileLoader('*', "C:/Users/Lenovo/Desktop/ds5760_project/app/utils.py").load_module()
 
 # 2. Select the database
 db = client.platform # 'use platform'
@@ -131,6 +131,10 @@ def create_user():
         for value in required_fields:
             if not value in required_fields:
                 return jsonify({"error": f"Missing required element"}), 400
+            
+        user_id = user_data['user_id']
+        if user.find_one({"user_id": user_id}):
+            return jsonify({"error": "Invalid user_id: user exist"}), 400
         
         user.insert_one(user_data)
         return jsonify({"message": "User successfully created."}), 201
@@ -155,6 +159,10 @@ def create_interest():
         for field in required_fields:
             if field not in interest_data:
                 return jsonify({"error": f"Missing required field"}), 400
+            
+        interest_id = interest_data['interest_id']
+        if interest.find_one({"interest_id": interest_id}):
+            return jsonify({"error": "Invalid interest_id: interest exist"}), 400
 
         interest.insert_one(interest_data)
         return jsonify({"message": "Interest successfully created."}), 201
@@ -199,6 +207,10 @@ def create_like():
         for field in required_fields:
             if field not in like_data:
                 return jsonify({"error": f"Missing required field"}), 400
+        
+        like_id = like_data['like_id']
+        if like.find_one({"like_id": like_id}):
+            return jsonify({"error": "Invalid like_id: like exist"}), 400
 
         like.insert_one(like_data)
         return jsonify({"message": "Like successfully created."}), 201
@@ -221,6 +233,11 @@ def create_comment():
         for field in required_fields:
             if field not in comment_data:
                 return jsonify({"error": f"Missing required field"}), 400
+        
+                
+        comment_id = comment_data['comment__id']
+        if comment.find_one({"comment_id": comment_id}):
+            return jsonify({"error": "Invalid comment_id: comment exist"}), 400
 
         comment.insert_one(comment_data)
         return jsonify({"message": "Comment successfully created."}), 201
@@ -520,6 +537,7 @@ def post_information():
        Input is a JSON object with post details.
        Normal output is "Post successfully created".
        If any required fields are missing, it will return error 400 with a message.
+       Checks if user_id exists before creating the post.
     '''
     try:
         post_data = request.get_json()
@@ -527,13 +545,18 @@ def post_information():
 
         for field in required_fields:
             if field not in post_data:
-                return jsonify({"error": f"Missing required field"}), 400
+                return jsonify({"error": f"Missing required field: {field}"}), 400
+
+        user_id = post_data['user_id']
+        if not user.find_one({"user_id": user_id}):
+            return jsonify({"error": "Invalid user_id: user does not exist"}), 400
 
         post.insert_one(post_data)
         return jsonify({"message": "Post successfully created."}), 201
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500    
+        return jsonify({"error": str(e)}), 500
+
 
 ############################## Query 6 ##############################
 #####################################################################
@@ -576,7 +599,8 @@ def query_friends():
        Output is a list of usernames for the user's friends.
     """
     try:
-        username = request.args.get('username')
+        data = request.get_json()
+        username = data['username']
         if not username:
             return jsonify({"error": "Username is required"}), 400
 
