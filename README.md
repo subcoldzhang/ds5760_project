@@ -85,7 +85,7 @@ We use Neo4j to store data related to user relationships and interactions, which
   <img src="./images/0.png" alt="1" width="700">
 </p>
 
-**1. Create User**
+**1. Create**
 - **End point**: `/create/{collection}` (POST)
 - **Purpose**: Creates a new data into a certain collection in the database (We use user as an example).
 - **Input Fields**:
@@ -101,9 +101,9 @@ If you're adding existing user(s), the respose would be:
   <img src="./images/1-1.png" alt="1" width="700">
 </p>
 
-**2. Delete User by ID**
-- **Endpoint**: `/delete_by_user_id` (DELETE)
-- **Purpose**: Deletes an existing user by their user_id.
+**2. Delete by ID**
+- **Endpoint**: `/delete_by_{collection}_id` (DELETE)
+- **Purpose**: Deletes an existing data by their id in a certain collection(We use user as an example).
 - **Input Fields**:
     - `user_id`: Unique identifier of the user to be deleted.
 
@@ -116,9 +116,9 @@ If you're deleting a nonexistent user, the respose would be:
   <img src="./images/2-1.png" alt="1" width="700">
 </p>
 
-**3. Update User by Username**
+**3. Update**
 - **Endpoint**: `/update_by_user_name` (PUT)
-- **Purpose**: Updates details of a user using their username.
+- **Purpose**: Updates details of data using their username or ID in a certain collection(We use user as an example).
 - **Input Fields**:
     - `username`: The name of the user to be updated.
     - Fields to update: `age`, `location`, or any other user attributes.
