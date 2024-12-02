@@ -11,8 +11,7 @@ We utilizes a Flask backend with endpoints for each query, allowing interaction 
 
 For example, inserting and updating user data is handled in MongoDB due to its flexibility and simplicity in storing document-like user records. Conversely, queries related to user interactions or interests, such as finding friends or content recommendations, are managed by Neo4j due to its efficiency in managing relationships through graph structures.
 
-## **Schema Design**
-### MongoDB
+## **MongoDB Schema Design**
 We use MongoDB to store basic user information, posts, interests, and related activities. The collections are as follows:
 
 **1. User Collection**
@@ -46,38 +45,32 @@ We use MongoDB to store basic user information, posts, interests, and related ac
 
 - `comment_id`, `post_id`, `user_id`, `content`, `timestamp`: Represents user comments on posts.
 
-### Neo4j
-We use Neo4j to store data related to user relationships and interactions, which benefit from graph-based modeling:
+## Environment Setup and Data Import
+1. **Open Docker Desktop**: Ensure Docker Desktop is running on your machine.
+2. **Run MongoDB container**: Navigate to the folder where your `docker-compose.yml` file is located, and run:
+```bash
+docker-compose up
+```
 
-#### Nodes
-**1. User Node**
-- Properties: `user_id`, `username`, `age`, `location`, `bio`.
+3. **Import Data**: Open the terminal and run:
+```bash
+docker exec -it mongo_final sh
+mongoimport --db platform --collection User --file /ds5760/final_project/User.json --jsonArray
+mongoimport --db platform --collection post --file /ds5760/final_project/Post.json --jsonArray
+...
+exit
+```
 
-**2. Post Node**
-- Properties: `post_id`, `user_id`, `content`, `topic`, `timestamp`, `hashtags`.
+4. **Install Dependencies**: Install dependencies before use:
+```bash
+pip install Flask PyMongo
+```
 
-**3. Interest Node**
-- Properties: `interest_id`, `interest_name`, `description`.
-
-**4. Comment Node**
-- Properties: `comment_id`, `post_id`, `user_id`, `content`, `timestamp`.
-
-#### Relationships:
-- Is_friend_of: `(User)-[:Is_friend_of {timestamp}]->(User)`
-
-- Posted: `(User)-[:Posted {timestamp}]->(Post)`
-
-- Is_interested_in: `(User)-[:Is_interested_in {timestamp}]->(Interest)`
-
-- Publish: `(User)-[:Publish {timestamp}]->(Comment)`
-
-- Is_on: `(Comment)-[:Is_on {timestamp}]->(Post)`
-
-- Like: `(User)-[:Like {timestamp}]->(Post)`
-
+5. **Run Application**: Run `run-app.py`, and we're good to go!
 
 ## API Endpoints
 ### MongoDB Queries
+Below is a detailed description of each MongoDB query that we implemented and tested using the Flask API, with Postman as the API testing tool.
 
 **0. Homepage**
 - **URL**: `http://localhost:5000/` (GET)
@@ -174,7 +167,7 @@ Example Request:
 
 **8. Analytical Queries**
 #### a. By top posts:
-- **Endpoint**: `/query_top_posts ` (GET)
+- **Endpoint**: `/query_top_posts` (GET)
 - **Purpose**: Retrieves the top 3 posts with the highest like counts.
 
 Example Request:
@@ -183,10 +176,161 @@ Example Request:
 </p>
 
 #### b. By interests:
-- **Endpoint**: `/query_most_common_interest  ` (GET)
+- **Endpoint**: `/query_most_common_interest` (GET)
 - **Purpose**: Finds the most common interest across users.
 
 Example Request:
 <p align="center">
   <img src="./images/7-2.png" alt="1" width="700">
+</p>
+
+## **Neo4j Schema Design**
+### Neo4j Queries:
+We use Neo4j to store data related to user relationships and interactions, which benefit from graph-based modeling:
+
+#### Nodes
+**1. User Node**
+- Properties: `user_id`, `username`, `age`, `location`, `bio`.
+
+**2. Post Node**
+- Properties: `post_id`, `user_id`, `content`, `topic`, `timestamp`, `hashtags`.
+
+**3. Interest Node**
+- Properties: `interest_id`, `interest_name`, `description`.
+
+**4. Comment Node**
+- Properties: `comment_id`, `post_id`, `user_id`, `content`, `timestamp`.
+
+#### Relationships:
+- Is_friend_of: `(User)-[:Is_friend_of {timestamp}]->(User)`
+
+- Posted: `(User)-[:Posted {timestamp}]->(Post)`
+
+- Is_interested_in: `(User)-[:Is_interested_in {timestamp}]->(Interest)`
+
+- Publish: `(User)-[:Publish {timestamp}]->(Comment)`
+
+- Is_on: `(Comment)-[:Is_on {timestamp}]->(Post)`
+
+- Like: `(User)-[:Like {timestamp}]->(Post)`
+------------
+<p align="center">
+  <img src="./images/Neo4j.png" alt="1" width="900">
+</p>
+
+## API Endpoints
+### Neo4j Queries
+**0. Import Data**
+- **Endpoint**: `/neo4j/initialize` (POST)
+<p align="center">
+  <img src="./images/8-0.png" alt="1" width="700">
+</p>
+
+**1. User Interaction Analysis**
+- **Endpoint**: `/top_interactor` (GET)
+- **Description**: Identifies the top 5 users based on the number of relationships they have within the network.
+- **Explanation**: This query counts all types of relationships (edges) for each user and orders them in descending order to find the most connected users. It helps to understand **who the most active or influential users** are based on their **social connectivity**.
+
+Example Request:
+<p align="center">
+  <img src="./images/8.png" alt="1" width="700">
+</p>
+
+**2. Interest-based Grouping**
+- **Endpoint**: `/interest_based_grouping` (GET)
+- **Description**: Groups users by shared interests, showing which users are interested in similar topics.
+- **Explanation**: This query matches users to their interests and collects users under each interest. It can be used to identify communities or clusters of users who share similar passions, aiding in social feature development such as group suggestions.
+
+Example Request:
+<p align="center">
+  <img src="./images/9.png" alt="1" width="700">
+</p>
+
+**3. Content Recommendation**
+- **Endpoint**: `/content_recommendation` (GET)
+- **Query Parameter**: `username` (e.g., "Alice")
+- **Description**: Recommends new content to a user based on shared interests with other users.
+- **Explanation**: This query first finds other users who have the highest number of common interests with the specified user. Then, it fetches the latest posts made by those users. This recommendation logic helps tailor content to users by connecting them with posts from like-minded individuals.
+
+Example Request:
+<p align="center">
+  <img src="./images/10.png" alt="1" width="700">
+</p>
+
+This recommendation query works by 2 steps:
+1. Finding Users with Shared Interests:
+- It matches the given user to other users who share common interests.
+- Users are sorted by the number of shared interests, select top 5.
+2. Fetching Relevant Content:
+- Retrieve posts of those selected users with common interests.
+- The posts are sorted by timestamp, with the top 5 most recent posts returned as recommendations.
+
+Return 400 if `username` missed:
+<p align="center">
+  <img src="./images/10-1.png" alt="1" width="700">
+</p>
+
+**4. Popular Topics Analysis**
+- **Endpoint**: `/popular_topics_analysis` (GET)
+- **Description**: Analyzes trending topics by counting the frequency of specific hashtags in recent posts.
+- **Explanation**: The query extracts hashtags from posts and counts their occurrences to determine the most popular topics. This is useful for understanding trending interests and can help the platform promote relevant content or inform users about trending topics.
+
+Example Request:
+<p align="center">
+  <img src="./images/11.png" alt="1" width="700">
+</p>
+
+**5. Friendship Chain Finder**
+- **Endpoint**: `/friend_chain` (GET)
+- **Query Parameters**:
+    - `username_1` (e.g., "Fiona")
+    - `username_2` (e.g., "Jane")
+- **Description**: Finds the **shortest path** between two users through friendship.
+- **Explanation**: It can be used to analyze social closeness and recommend mutual friends.
+
+Example Request:
+<p align="center">
+  <img src="./images/12.png" alt="1" width="700">
+</p>
+
+**6. User Engagement Metrics**
+- **Endpoint**: `/user_engagement_metrics` (GET)
+- **Description**: Tracks engagement metrics, showing the top 5 posts with the highest number of engagements.
+- **Explanation**: This query returns posts sorted by their engagement counts (such as likes). This feature helps identify popular content and can be used to encourage further user interaction by highlighting well-liked posts.
+
+Example Request:
+<p align="center">
+  <img src="./images/13.png" alt="1" width="700">
+</p>
+
+**7. Influential Users**
+- **Endpoint**: `/influential_users` (GET)
+- **Description**: Identifies top users based on engagement metrics, such as the number of likes on posts.
+- **Explanation**: This query ranks users based on how much interaction (likes) they generate, highlighting the most influential figures in the social network. It can help to prioritize content visibility for these users.
+
+Example Request:
+<p align="center">
+  <img src="./images/14.png" alt="1" width="700">
+</p>
+
+**8. Common Interests Between Two Users**
+- **Endpoint**: `/common_interests` (GET)
+- **Description**: Finds shared interests between two specified users.
+- **Query Parameters**:
+    - `user_id_1`: The ID of the first user.
+    - `user_id_2`: The ID of the second user.
+
+Example Request:
+<p align="center">
+  <img src="./images/15.png" alt="1" width="700">
+</p>
+
+9. No Active Users
+- **Endpoint**: `/no_active_users` (GET)
+- **Description**: Retrieves users with no recent activity, marking them as inactive.
+- **Explanation**: This query finds users who haven't participated in any relationships (e.g., posts, likes). This information can be used to develop re-engagement strategies for the platform.
+
+Example Request:
+<p align="center">
+  <img src="./images/16.png" alt="1" width="700">
 </p>
