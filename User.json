@@ -19,5 +19,54 @@
         "age": 22,
         "location": "Chicago",
         "bio": "Fitness junkie and foodie."
+    },
+    {
+        "user_id": 4,
+        "username": "Daisy",
+        "age": 28,
+        "location": "San Francisco",
+        "bio": "Passionate about art and music."
+    },
+    {
+        "user_id": 5,
+        "username": "Ethan",
+        "age": 35,
+        "location": "Seattle",
+        "bio": "Software developer, coffee lover."
+    },
+    {
+        "user_id": 6,
+        "username": "Fiona",
+        "age": 26,
+        "location": "Boston",
+        "bio": "Fitness trainer and health coach."
+    },
+    {
+        "user_id": 7,
+        "username": "George",
+        "age": 32,
+        "location": "Austin",
+        "bio": "Loves hiking and outdoor adventures."
+    },
+    {
+        "user_id": 8,
+        "username": "Hannah",
+        "age": 29,
+        "location": "Denver",
+        "bio": "Mountain lover and environmentalist."
+    },
+    {
+        "user_id": 9,
+        "username": "Ian",
+        "age": 27,
+        "location": "Portland",
+        "bio": "Cyclist and craft beer enthusiast."
+    },
+    {
+        "user_id": 10,
+        "username": "Jane",
+        "age": 31,
+        "location": "Miami",
+        "bio": "Beach lover and yoga practitioner."
     }
 ]

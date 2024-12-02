@@ -1,140 +1,183 @@
-# **Friendship Platform**
+# **Social Media Platform Application**
 
 ## **Overview**
-The Friendship Platform is a social media platform. It built with Flask, MongoDB and Neo4j to manage user interactions, posts, interests, friendships, likes, and comments. In this platform, user information and published information can be stored. Not only that, the platform is also expected to help users inquire about interaction, interests, and other related issues to enhance user experiences. It also enables the platform to have a better understanding including but not limited to users' behavior, hot topics, etc.
+Our project is a social media platform that uses two types of databases: **MongoDB** and **Neo4j**. The platform stores user information, posts, interests, friendships, and interactions. This design provides both flexibility in data modeling and an efficient way to manage relationships and interactions between users.
 
-## **Design schema**
-1. MongoDB
-- User collection: This collection records the specific information of all users.
+As a document-based database, MongoDB handles the user profiles, posts, comments, likes, and general information that is more naturally represented in a tabular or document format. This includes operations like **creating** users, **posting** content, and **deleting** records.
 
-Properties: user_id, username, age, location and bio
+Neo4j is a graph-based database allowing us to represent and explore complex relationships among users, posts, and interests effectively. It is particularly useful for graph-based queries, such as **finding the shortest paths between users (friend connections), grouping users by common interests, and recommending content based on user activity**.
 
-- Post collection: This collection records the specific information of all posts.
+We utilizes a Flask backend with endpoints for each query, allowing interaction via the Postman API testing tool. This API approach enables us to demonstrate database queries for both MongoDB and Neo4j while highlighting the strengths of each database system. MongoDB is well-suited for storing independent documents with user-centric operations, while Neo4j performs better in handling connected data.
 
-Properties: post_id, user_id, content, topic and timestamp
+For example, inserting and updating user data is handled in MongoDB due to its flexibility and simplicity in storing document-like user records. Conversely, queries related to user interactions or interests, such as finding friends or content recommendations, are managed by Neo4j due to its efficiency in managing relationships through graph structures.
 
-- Interest collection: This collection records the specific information of all interest.
+## **Schema Design**
+### MongoDB
+We use MongoDB to store basic user information, posts, interests, and related activities. The collections are as follows:
 
-Properties: interest_id, user_id, interest_name, description and timestamp
+**1. User Collection**
 
-- Friendship collection: This collection records all friendships between two users.
+- `user_id`: Unique identifier for each user.
+- `username`, `age`, `location`, `bio`: Personal information.
 
-Properties: user_id_1, username_1, user_id_2, username_2 and timestamp
+**2. Post Collection**
 
-- Like collection: This collection records all likes for post.
+- `post_id`: Unique identifier for each post.
+- `user_id`: Identifier of the user who created the post.
+- `content`, `topic`, `timestamp`: Post details.
 
-Properties: like_id, user_id, post_id and timestamp
+**3. Interest Collection**
 
-- Comment collection: This collection records the specific information of all comments for post.
+- `interest_id`: Unique identifier for each interest.
+- `user_id`: Identifier of the user associated with the interest.
+- `interest_name`, `description`, `timestamp`: Interest details.
 
-Properties: comment_id, post_id, user_id, content and timestamp
+**4. Friendship Collection**
 
----
+- `user_id_1`, `user_id_2`: The two users's id involved in a friendship relationship.
+- `username_1`, `username_2`: The two users's name involved in a friendship relationship.
+- `timestamp`: Date and time the friendship was established.
 
-2. Neo4j
+**5. Like Collection**
 
-Type of nodes:
-- User: This node records the specific information of all users.
+- `like_id`, `user_id`, `post_id`, `timestamp`: Represents likes on posts.
 
-Properties: user_id, username, age, location and bio
+**6. Comment Collection**
 
-- Post: This node records the specific information of all posts.
+- `comment_id`, `post_id`, `user_id`, `content`, `timestamp`: Represents user comments on posts.
 
-Properties: post_id, user_id, content, topic and timestamp
+### Neo4j
+We use Neo4j to store data related to user relationships and interactions, which benefit from graph-based modeling:
 
-- Interest: This node records the specific information of all interest.
+#### Nodes
+**1. User Node**
+- Properties: `user_id`, `username`, `age`, `location`, `bio`.
 
-Properties: interest_id, user_id, interest_name, description and timestamp
+**2. Post Node**
+- Properties: `post_id`, `user_id`, `content`, `topic`, `timestamp`, `hashtags`.
 
-- Comment: This node records the specific information of all comments for post.
+**3. Interest Node**
+- Properties: `interest_id`, `interest_name`, `description`.
 
-Properties: comment_id, post_id, user_id, content and timestamp
+**4. Comment Node**
+- Properties: `comment_id`, `post_id`, `user_id`, `content`, `timestamp`.
 
----
+#### Relationships:
+- Is_friend_of: `(User)-[:Is_friend_of {timestamp}]->(User)`
 
-Type of edges:
-- Is_friend_of (User to User): This edge represents that two users are friends.
+- Posted: `(User)-[:Posted {timestamp}]->(Post)`
 
-Properties: timestamp
+- Is_interested_in: `(User)-[:Is_interested_in {timestamp}]->(Interest)`
 
-- Posted (User to Post): This edge represents users who have posted content.
+- Publish: `(User)-[:Publish {timestamp}]->(Comment)`
 
-Properties: timestamp
+- Is_on: `(Comment)-[:Is_on {timestamp}]->(Post)`
 
-- Is_interest_in (User to Interest): This edge represents which field the user is interested in.
+- Like: `(User)-[:Like {timestamp}]->(Post)`
 
-Properties: timestamp
-
-- Like (User to Post): This edge represents that user like the post.
-
-Properties: timestamp
-
-- Publish (User to Comment): This edge represents that user publish the comment.
-
-Properties: timestamp
-
-- Is_on (Comment to Post): This edge represents that comment is on the post.
-
-Properties: timestamp
 
 ## API Endpoints
-1. Homepage
-* URL: GET http://localhost:5000/
-* Output is 
-{
-    'apiVersion': 'v1.0',
-    "message": "Welcome to the Friendship platform!"
-    'status': '200'
-}
-![photo](1.png)
+### MongoDB Queries
 
-2. Create
-* URL: POST http://localhost:5000/create/{collection}
-* Input is a detail data of corresponding collection. All collections can be used.
-* Normal output will show '{collection} successfully created'. If user miss required elements, then it will print error 400, Missing required elements. If there are other errors, error 500 or error 404 (not found) will be returned.
-![photo](2.png)
-![photo](3.png)
+**0. Homepage**
+- **URL**: `http://localhost:5000/` (GET)
+<p align="center">
+  <img src="./images/0.png" alt="1" width="700">
+</p>
 
-3. Search
-* URL: GET http://localhost:5000/search_by_{collection}_id/<{collection}_id>
-* Input is id. Id will follows /search_by_{collection}_id/. Only user, post, and interest collections can be used here.
-* Normal output is detail information of corresponding id. If id doesn't exist, then it will print error 404, No This {collection}. If there are other errors, error 500 or error 404 (not found) will be returned.
-![photo](4.png)
+**1. Create User**
+- **End point**: `/create/{collection}` (POST)
+- **Purpose**: Creates a new data into a certain collection in the database (We use user as an example).
+- **Input Fields**:
+    - `user_id`: Unique identifier for the user.
+    - `username`, `age`, `location`, `bio`: Additional details about the user.
 
-4. Update
-* URL: PUT http://localhost:5000/update_by_{collection}_id
-* Input is id and new information. Only user, post, and comment collections can be used here.
-* Normal output is Job successfully updated. If id doesn't exist, then it will print error 400, Id is required. If id doesn't be found in database, then it will print error 304, Job not found. If there are other errors, error 500 or error 404 (not found) will be returned.
-![photo](5.png)
+Example Requests:
+<p align="center">
+  <img src="./images/1.png" alt="1" width="700">
+</p>
+If you're adding existing user(s), the respose would be:
+<p align="center">
+  <img src="./images/1-1.png" alt="1" width="700">
+</p>
 
-5. Delete
-* URL: DELETE http://localhost:5000/delete_by_{collection}_id
-* Input is/are id(s). All collections can be used.
-* Normal output is 204. If id doesn't exist, then it will print error 400, ID is required. If id doesn't be found in database, then it will print error 304, {collection} not found. If there are other errors, error 500 or error 404 (not found) will be returned.
-![photo](6.png)
+**2. Delete User by ID**
+- **Endpoint**: `/delete_by_user_id` (DELETE)
+- **Purpose**: Deletes an existing user by their user_id.
+- **Input Fields**:
+    - `user_id`: Unique identifier of the user to be deleted.
 
-6. Query by timestamp
-* URL: GET http://localhost:5000/query_by_timestamp
-* Input are min_timestamp and max_timestamp.
-* Normal output is all posts with timestamps between min_timestamp and max_timestamp. If min_timestamp or max_timestamp is missing, it will return error 400. If there are other errors, error 500 will be returned.
-![photo](7.png)
+Example Request:
+<p align="center">
+  <img src="./images/2.png" alt="1" width="700">
+</p>
+If you're deleting a nonexistent user, the respose would be:
+<p align="center">
+  <img src="./images/2-1.png" alt="1" width="700">
+</p>
 
-7. Query top posts
-* URL: GET http://localhost:5000/query_top_posts
-* Function to query the top 3 most popular posts. The popularity of a post is determined by the number of likes. Output is a ranked list of post IDs and their like counts. If there are other errors, error 500 will be returned.
-![photo](8.png)
+**3. Update User by Username**
+- **Endpoint**: `/update_by_user_name` (PUT)
+- **Purpose**: Updates details of a user using their username.
+- **Input Fields**:
+    - `username`: The name of the user to be updated.
+    - Fields to update: `age`, `location`, or any other user attributes.
 
-8. Query most common interest
-* URL: GET http://localhost:5000/query_most_common_interest
-* Function to query the top 3 most common interest. The popularity of a interest is determined by the number of likes. Output is a interest and its like counts. If there are other errors, error 500 will be returned.
-![photo](9.png)
+Example Requests:
+<p align="center">
+  <img src="./images/3.png" alt="1" width="700">
+</p>
 
-9. Query friends
-* URL: GET http://localhost:5000/query_friends
-* Input is username.
-* Output is a list of usernames for the user's friends.
-![photo](10.png)
+**4. Create Post**
+- **Endpoint**: `/newpost` (POST)
+- **Purpose**: Creates a new post by a user.
+- **Input Fields**:
+    - `post_id`, `user_id`, `content`, `topic`, `timestamp`
 
+Example Request:
+<p align="center">
+  <img src="./images/4.png" alt="1" width="700">
+</p>
 
+**5. Search Posts by Timestamp**
+- **Endpoint**: `/query_by_timestamp` (GET)
+- **Purpose**: Retrieves posts created within a specific time range.
+- **Query Parameters**:
+    - `min_timestamp`, `max_timestamp`
 
+Example Request:
+<p align="center">
+  <img src="./images/5.png" alt="1" width="700">
+</p>
 
+**6. Query Friends by Username**
+- **Endpoint**: `/query_friends` (GET)
+- **Purpose**: Retrieves a list of friends for the given username.
+- **Input Fields**:
+    - `username`
+
+Example Request:
+<p align="center">
+  <img src="./images/6.png" alt="1" width="700">
+</p>
+
+**7. Analytical Queries**
+#### a. By top posts:
+- **Endpoint**: `/query_top_posts ` (GET)
+- **Purpose**: Retrieves the top 3 posts with the highest like counts.
+- **Input Fields**:
+    - `username`
+
+Example Request:
+<p align="center">
+  <img src="./images/7.png" alt="1" width="700">
+</p>
+
+#### b. By interests:
+- **Endpoint**: `/query_most_common_interest  ` (GET)
+- **Purpose**: Finds the most common interest across users.
+
+Example Request:
+<p align="center">
+  <img src="./images/7-2.png" alt="1" width="700">
+</p>

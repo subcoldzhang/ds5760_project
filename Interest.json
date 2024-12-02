@@ -1,23 +1,135 @@
 [
     {
-        "interest_id": 201,
+        "interest_id": 401,
         "user_id": 1,
         "interest_name": "Photography",
-        "description": "Capturing moments through the lens.",
+        "description": "Capturing beautiful moments through the lens.",
         "timestamp": "2024-11-20T14:00:00Z"
     },
     {
-        "interest_id": 202,
-        "user_id": 2,
-        "interest_name": "Gaming",
-        "description": "Exploring new games and strategies.",
-        "timestamp": "2024-11-18T12:00:00Z"
+        "interest_id": 402,
+        "user_id": 1,
+        "interest_name": "Travel",
+        "description": "Exploring new places and cultures.",
+        "timestamp": "2024-11-21T15:00:00Z"
     },
     {
-        "interest_id": 203,
+        "interest_id": 403,
+        "user_id": 1,
+        "interest_name": "Cooking",
+        "description": "Experimenting with different cuisines.",
+        "timestamp": "2024-11-22T18:00:00Z"
+    },
+    {
+        "interest_id": 404,
+        "user_id": 2,
+        "interest_name": "Gaming",
+        "description": "Playing and reviewing the latest video games.",
+        "timestamp": "2024-11-19T10:00:00Z"
+    },
+    {
+        "interest_id": 405,
         "user_id": 3,
         "interest_name": "Fitness",
-        "description": "Staying healthy and active.",
-        "timestamp": "2024-11-19T06:00:00Z"
+        "description": "Maintaining an active and healthy lifestyle.",
+        "timestamp": "2024-11-18T08:00:00Z"
+    },
+    {
+        "interest_id": 406,
+        "user_id": 4,
+        "interest_name": "Art",
+        "description": "Appreciating modern and classical art.",
+        "timestamp": "2024-11-20T13:00:00Z"
+    },
+    {
+        "interest_id": 407,
+        "user_id": 4,
+        "interest_name": "Music",
+        "description": "Attending concerts and discovering new artists.",
+        "timestamp": "2024-11-21T14:00:00Z"
+    },
+    {
+        "interest_id": 408,
+        "user_id": 4,
+        "interest_name": "Travel",
+        "description": "Exploring new cities and cultural experiences.",
+        "timestamp": "2024-11-23T14:00:00Z"
+    },
+    {
+        "interest_id": 409,
+        "user_id": 5,
+        "interest_name": "Coffee",
+        "description": "Exploring different coffee roasts and brewing techniques.",
+        "timestamp": "2024-11-23T09:00:00Z"
+    },
+    {
+        "interest_id": 410,
+        "user_id": 5,
+        "interest_name": "Coding",
+        "description": "Building projects and learning new programming languages.",
+        "timestamp": "2024-11-25T10:00:00Z"
+    },
+    {
+        "interest_id": 411,
+        "user_id": 6,
+        "interest_name": "Health & Wellness",
+        "description": "Helping others achieve fitness goals.",
+        "timestamp": "2024-11-18T07:30:00Z"
+    },
+    {
+        "interest_id": 412,
+        "user_id": 7,
+        "interest_name": "Hiking",
+        "description": "Exploring new trails and enjoying nature.",
+        "timestamp": "2024-11-17T16:00:00Z"
+    },
+    {
+        "interest_id": 413,
+        "user_id": 7,
+        "interest_name": "Camping",
+        "description": "Setting up camp in the great outdoors.",
+        "timestamp": "2024-11-23T17:30:00Z"
+    },
+    {
+        "interest_id": 414,
+        "user_id": 8,
+        "interest_name": "Environmentalism",
+        "description": "Participating in community clean-ups.",
+        "timestamp": "2024-11-19T13:00:00Z"
+    },
+    {
+        "interest_id": 415,
+        "user_id": 8,
+        "interest_name": "Mountain Climbing",
+        "description": "Climbing peaks and exploring mountainous terrains.",
+        "timestamp": "2024-11-22T08:00:00Z"
+    },
+    {
+        "interest_id": 416,
+        "user_id": 9,
+        "interest_name": "Cycling",
+        "description": "Exploring trails around Portland.",
+        "timestamp": "2024-11-20T08:30:00Z"
+    },
+    {
+        "interest_id": 417,
+        "user_id": 10,
+        "interest_name": "Yoga",
+        "description": "Practicing yoga on the beach.",
+        "timestamp": "2024-11-18T06:30:00Z"
+    },
+    {
+        "interest_id": 418,
+        "user_id": 10,
+        "interest_name": "Community Service",
+        "description": "Volunteering in local community events.",
+        "timestamp": "2024-11-19T10:30:00Z"
+    },
+    {
+        "interest_id": 419,
+        "user_id": 10,
+        "interest_name": "Beach Cleanup",
+        "description": "Organizing beach cleanup activities.",
+        "timestamp": "2024-11-22T11:30:00Z"
     }
 ]

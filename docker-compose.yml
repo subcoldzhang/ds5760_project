@@ -3,10 +3,11 @@ version: '1.0'
 services:
   mongodb:
     image: mongo:latest
+    container_name: mongo_final
     ports:
       - "27017:27017"
     volumes:
-      - C:/Users/Lenovo/Desktop/ds5760_project:/ds5760/final_project
+      - D:\OneDrive - Vanderbilt\Desktop\Hillbert's PC Files\My Grad Life\Fall 2024\DS5760_NoSQL\FinalProject\ds5760_project:/ds5760/final_project
     # environment: # disabling this for class practice only
     #   MONGO_INITDB_ROOT_USERNAME: root
     #   MONGO_INITDB_ROOT_PASSWORD: examplepassword
@@ -19,4 +20,4 @@ services:
     environment:
       NEO4J_AUTH: 'neo4j/password' # username/password
     volumes:
-      - C:/Users/Lenovo/Desktop/ds5760_project:/ds5760/final_project
+      - D:\OneDrive - Vanderbilt\Desktop\Hillbert's PC Files\My Grad Life\Fall 2024\DS5760_NoSQL\FinalProject\ds5760_project:/ds5760/final_project
