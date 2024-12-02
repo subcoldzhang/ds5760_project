@@ -165,8 +165,6 @@ Example Request:
 #### a. By top posts:
 - **Endpoint**: `/query_top_posts ` (GET)
 - **Purpose**: Retrieves the top 3 posts with the highest like counts.
-- **Input Fields**:
-    - `username`
 
 Example Request:
 <p align="center">
