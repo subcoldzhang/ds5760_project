@@ -202,7 +202,7 @@ def query_influential_users():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-############################## Query +1 #############################
+############################## Query 15 #############################
 #####################################################################
 @app.route('/common_interests', methods=['GET'])
 def query_common_interests():
@@ -227,7 +227,7 @@ def query_common_interests():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-############################## Query +2 #############################
+############################## Query 16 #############################
 #####################################################################
 @app.route('/no_active_users', methods=['GET'])
 def query_no_active_users():
