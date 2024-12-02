@@ -96,7 +96,7 @@ Example Requests:
   <img src="./images/8.png" alt="1" width="700">
 </p>
 
-**1. Create**
+**2. Create**
 - **End point**: `/create/{collection}` (POST)
 - **Purpose**: Creates a new data into a certain collection in the database (We use user as an example).
 - **Input Fields**:
@@ -112,7 +112,7 @@ If you're adding existing user(s), the respose would be:
   <img src="./images/1-1.png" alt="1" width="700">
 </p>
 
-**2. Delete by ID**
+**3. Delete by ID**
 - **Endpoint**: `/delete_by_{collection}_id` (DELETE)
 - **Purpose**: Deletes an existing data by their id in a certain collection (We use user as an example).
 - **Input Fields**:
@@ -127,7 +127,7 @@ If you're deleting a nonexistent user, the respose would be:
   <img src="./images/2-1.png" alt="1" width="700">
 </p>
 
-**3. Update**
+**4. Update**
 - **Endpoint**: `/update_by_user_name` (PUT)
 - **Purpose**: Updates details of data using their username or ID in a certain collection (We use user as an example).
 - **Input Fields**:
@@ -139,7 +139,7 @@ Example Requests:
   <img src="./images/3.png" alt="1" width="700">
 </p>
 
-**4. Create Post**
+**5. Create Post**
 - **Endpoint**: `/newpost` (POST)
 - **Purpose**: Creates a new post by a user.
 - **Input Fields**:
@@ -150,7 +150,7 @@ Example Request:
   <img src="./images/4.png" alt="1" width="700">
 </p>
 
-**5. Search Posts by Timestamp**
+**6. Search Posts by Timestamp**
 - **Endpoint**: `/query_by_timestamp` (GET)
 - **Purpose**: Retrieves posts created within a specific time range.
 - **Query Parameters**:
@@ -161,7 +161,7 @@ Example Request:
   <img src="./images/5.png" alt="1" width="700">
 </p>
 
-**6. Query Friends by Username**
+**7. Query Friends by Username**
 - **Endpoint**: `/query_friends` (GET)
 - **Purpose**: Retrieves a list of friends for the given username.
 - **Input Fields**:
@@ -172,7 +172,7 @@ Example Request:
   <img src="./images/6.png" alt="1" width="700">
 </p>
 
-**7. Analytical Queries**
+**8. Analytical Queries**
 #### a. By top posts:
 - **Endpoint**: `/query_top_posts ` (GET)
 - **Purpose**: Retrieves the top 3 posts with the highest like counts.
