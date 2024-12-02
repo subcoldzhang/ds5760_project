@@ -93,7 +93,7 @@ We use Neo4j to store data related to user relationships and interactions, which
 
 Example Requests:
 <p align="center">
-  <img src="./images/8.png" alt="1" width="700">
+  <img src="./images/100.png" alt="1" width="700">
 </p>
 
 **2. Create**
