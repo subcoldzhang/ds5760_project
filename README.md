@@ -325,7 +325,7 @@ Example Request:
   <img src="./images/15.png" alt="1" width="700">
 </p>
 
-9. No Active Users
+**9. No Active Users**
 - **Endpoint**: `/no_active_users` (GET)
 - **Description**: Retrieves users with no recent activity, marking them as inactive.
 - **Explanation**: This query finds users who haven't participated in any relationships (e.g., posts, likes). This information can be used to develop re-engagement strategies for the platform.
